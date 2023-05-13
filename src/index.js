@@ -1,6 +1,7 @@
 import axios from 'axios';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import { Notify } from 'notiflix';
 
 const API_URL = 'https://pixabay.com/api';
 const API_KEY = '36365586-331bc85183b3fd7ba137836b3';
@@ -10,6 +11,7 @@ const inputEl = document.querySelector('input[class="form-element"]');
 
 formEl.addEventListener('submit', ev => {
   ev.preventDefault();
+  galleryEl.innerHTML = '';
   makeGallery(inputEl.value.trim());
 });
 
@@ -22,12 +24,17 @@ const getImages = async searchedPhrase => {
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: 'true',
+        page: 1,
+        per_page: 40,
       },
     });
     if (response.data.hits.length === 0) throw new Error();
     return response.data.hits;
   } catch (error) {
     console.error(error);
+    Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
   }
 };
 
