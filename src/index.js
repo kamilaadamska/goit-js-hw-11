@@ -1,4 +1,6 @@
 import axios from 'axios';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const API_URL = 'https://pixabay.com/api';
 const API_KEY = '36365586-331bc85183b3fd7ba137836b3';
@@ -15,8 +17,8 @@ const getImages = async () => {
         safesearch: 'true',
       },
     });
-    const images = response.data.hits;
-    return images;
+    if (response.data.hits.length === 0) throw new Error();
+    return response.data.hits;
   } catch (error) {
     console.error(error);
   }
@@ -28,8 +30,8 @@ const makeGallery = async () => {
     const markup = images
       .map(image => {
         return `<div class="photo-card">
-  <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
-  <div class="info">
+  <a href="${image.largeImageURL}"><img src="${image.webformatURL}" class="photo" alt="${image.tags}" loading="lazy" /></a>
+    <div class="info">
     <p class="info-item">
       <b>Likes</b>
       <span>${image.likes}</span>
@@ -46,12 +48,13 @@ const makeGallery = async () => {
       <b>Downloads</b>
       <span>${image.downloads}</span>
     </p>
-  </div>
+  </div> 
 </div>
 `;
       })
       .join('');
     galleryEl.innerHTML = markup;
+    new SimpleLightbox('.gallery a');
   } catch (error) {
     console.error(error);
   }
