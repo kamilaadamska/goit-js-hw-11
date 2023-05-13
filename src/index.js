@@ -5,13 +5,20 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const API_URL = 'https://pixabay.com/api';
 const API_KEY = '36365586-331bc85183b3fd7ba137836b3';
 const galleryEl = document.querySelector('.gallery');
+const formEl = document.getElementById('search-form');
+const inputEl = document.querySelector('input[class="form-element"]');
 
-const getImages = async () => {
+formEl.addEventListener('submit', ev => {
+  ev.preventDefault();
+  makeGallery(inputEl.value.trim());
+});
+
+const getImages = async searchedPhrase => {
   try {
     const response = await axios.get(`${API_URL}`, {
       params: {
         key: API_KEY,
-        q: 'yellow flowers',
+        q: `${searchedPhrase}`,
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: 'true',
@@ -24,9 +31,9 @@ const getImages = async () => {
   }
 };
 
-const makeGallery = async () => {
+const makeGallery = async searchedPhrase => {
   try {
-    const images = await getImages();
+    const images = await getImages(searchedPhrase);
     const markup = images
       .map(image => {
         return `<div class="photo-card">
@@ -59,5 +66,3 @@ const makeGallery = async () => {
     console.error(error);
   }
 };
-
-makeGallery();
