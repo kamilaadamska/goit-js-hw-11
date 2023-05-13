@@ -1,0 +1,28 @@
+.container {
+  background-color: #00008b;
+  padding: 10px;
+  box-shadow: 0px 0px 15px -3px rgba(0, 0, 64, 1);
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+}
+
+.form-element {
+  padding: 8px;
+  border-radius: 3px;
+  border: 1px solid black;
+  outline: none;
+  font-size: 14px;
+  &:first-child {
+    min-width: 20%;
+  }
+  &:last-child {
+    transform: translateX(-2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 35px;
+  }
+}
